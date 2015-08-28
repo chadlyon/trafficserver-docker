@@ -5,7 +5,9 @@ MAINTAINER  Chad Lyon "http://github.com/chadlyon"
 # Update the package repository
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \ 
 	DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
-	DEBIAN_FRONTEND=noninteractive apt-get install -y wget curl git locales build-essential pkg-config dh-autoreconf bzip2 libssl-dev libxml2-dev libpcre3-dev tcl-dev libboost-dev
+	DEBIAN_FRONTEND=noninteractive apt-get install -y wget curl git locales build-essential pkg-config dh-autoreconf bzip2 \
+	libpcre3-dev tcl-dev libboost-dev zlib1g-dev libcunit1-dev libssl-dev libxml2-dev libev-dev libevent-dev libjansson-dev \
+	libjemalloc-dev cython python3.4-dev python-setuptools
 
 # Configure locale
 RUN export LANGUAGE=en_US.UTF-8 && \
@@ -20,7 +22,7 @@ RUN cd /downloads/spdylay/ && autoreconf -if && ./configure --prefix=/opt/spdyla
 
 # Install nghttp2
 RUN git clone --depth 1 https://github.com/tatsuhiro-t/nghttp2.git /downloads/nghttp2
-RUN cd /downloads/nghttp2 && autoreconf -i && automake && autoconf && ./configure --enable-app && make && make install
+RUN cd /downloads/nghttp2 && autoreconf -i && automake && autoconf && PKG_CONFIG_PATH=/opt/spdylay/lib/pkgconfig/ ./configure --enable-app && make && make install
 
 # Install TrafficServer
 RUN mkdir -p /downloads/trafficserver
