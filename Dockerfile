@@ -18,6 +18,10 @@ RUN export LANGUAGE=en_US.UTF-8 && \
 RUN git clone https://github.com/tatsuhiro-t/spdylay /downloads/spdylay
 RUN cd /downloads/spdylay/ && autoreconf -if && ./configure --prefix=/opt/spdylay && make install
 
+# Install nghttp2
+RUN git clone --depth 1 https://github.com/tatsuhiro-t/nghttp2.git /downloads/nghttp2
+RUN cd /downloads/nghttp2 && autoreconf -i && automake && autoconf && ./configure --enable-app && make && make install
+
 # Install TrafficServer
 RUN mkdir -p /downloads/trafficserver
 RUN wget http://download.nextag.com/apache/trafficserver/trafficserver-5.3.1.tar.bz2 -O /downloads/trafficserver.tar.bz2
